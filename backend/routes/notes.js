@@ -40,22 +40,47 @@ router.post('/addnote',fetchUser,
 
     router.put('/updatenote/:id',fetchUser,
     async (req,res)=>{
-        const {title,description,tag}=req.body;
-        const newNote={};
-        if (title){newNote.title=title};
-        if (description){newNote.description=description};
-        if (tag){newNote.tag=tag};
+        try {
+            
+            const {title,description,tag}=req.body;
+            const newNote={};
+            if (title){newNote.title=title};
+            if (description){newNote.description=description};
+            if (tag){newNote.tag=tag};
 
-        // find the note to be update
-        let note =await Note.findById(req.params.id);
-        if(!note){
-            res.status(404).send("Not Found")
+            // find the note to be update
+            let note =await Note.findById(req.params.id);
+            if(!note){
+                res.status(404).send("Not Found")
+            }
+            if (note.user.toString()!==req.user.id){
+                return res.status(401).send("Not Allowed");
+            }
+            note= await Note.findByIdAndUpdate(req.params.id,{$set: newNote},{new:true});
+            res.send(note);
+        }catch (error) {
+            console.log(error.message);
+            res.status(500).send("Internal Server error occured!")
         }
-        if (note.user.toString()!==req.user.id){
-            return res.status(401).send("Not Allowed");
+    })
+
+    router.delete('/deletenote/:id',fetchUser,
+    async (req,res)=>{
+        try {
+            // find the note to be update
+            let note =await Note.findById(req.params.id);
+            if(!note){
+                res.status(404).send("Not Found")
+            }
+            if (note.user.toString()!==req.user.id){
+                return res.status(401).send("Not Allowed");
+            }
+            note= await Note.findByIdAndDelete(req.params.id);
+            res.send({"Success":"Note has been deleted!"});
+        }catch (error) {
+            console.log(error.message);
+            res.status(500).send("Internal Server error occured!")
         }
-        note= await Note.findByIdAndUpdate(req.params.id,{$set: newNote},{new:true});
-        res.send(note);
     })
 
 module.exports=router
