@@ -8,8 +8,6 @@ app.use(cors());
 app.use(express.json());
 
 // Avaiable 
-
-
 app.use('/api/auth',require('./routes/auth'))
 app.use('/api/notes',require('./routes/notes'))
 
