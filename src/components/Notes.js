@@ -51,21 +51,21 @@ function Notes() {
                             <form className="my-3">
                                 <div className="mb-3">
                                     <label htmlFor="title" className="form-label">Title</label>
-                                    <input type="text" className="form-control" id="utitle" value={note.utitle} name="utitle" aria-describedby="emailHelp" onChange={onChange} />
+                                    <input type="text" className="form-control" id="utitle" value={note.utitle} name="utitle" aria-describedby="emailHelp" onChange={onChange} minLength={5} required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="description" className="form-label">Description</label>
-                                    <input type="text" className="form-control" id="udescription" value={note.udescription} name="udescription" onChange={onChange} />
+                                    <input type="text" className="form-control" id="udescription" value={note.udescription} name="udescription" onChange={onChange} minLength={5} required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="tag" className="form-label">Tag</label>
-                                    <input type="text" className="form-control" id="utag" value={note.utag} name="utag" onChange={onChange} />
+                                    <input type="text" className="form-control" id="utag" value={note.utag} name="utag" onChange={onChange} minLength={5} required />
                                 </div>
                             </form>
                         </div>
                         <div className="modal-footer">
                             <button ref={refclose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
+                            <button disabled={note.utitle.length<5||note.udescription.length<5} onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
@@ -73,6 +73,9 @@ function Notes() {
 
             <div className="row my-3">
                 <h1>Your Notes</h1>
+                <div className="container mx-2"> 
+                    {notes.length===0 && 'no notes to display'}
+                </div>
                 {notes.map((note) => {
                     return <NoteItem note={note} updateNote={updateNote} />
                 })}
