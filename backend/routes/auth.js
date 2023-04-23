@@ -72,7 +72,7 @@ router.post('/login',
         }
       }
       const authtoken= jwt.sign(payload,JWT_SECERT);
-      res.send(authtoken);
+      res.json(authtoken);
       } catch(error) {
       console.log(error.message);
       res.status(500).send("Internal Server error occured!")
