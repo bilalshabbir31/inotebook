@@ -7,7 +7,7 @@ function Notes() {
 
     const context = useContext(noteContext);
 
-    const { notes, getNotes } = context;
+    const { notes, getNotes,editNote } = context;
 
     const [note, setNote] = useState({utitle:"",udescription:"",utag:"default"});
 
@@ -16,15 +16,17 @@ function Notes() {
     }, []);
 
     const ref = useRef("");
+    const refclose = useRef("");
 
     const updateNote = (currentnote) => {
         ref.current.click();
-        setNote({utitle:currentnote.title,udescription:currentnote.description,utag:currentnote.tag});
+        setNote({id:currentnote._id,utitle:currentnote.title,udescription:currentnote.description,utag:currentnote.tag});
     }
 
     const handleClick=(e)=>{
         console.log("update",note);
-        e.preventDefault();
+        editNote(note.id,note.utitle,note.udescription,note.utag);
+        refclose.current.click();
     }
 
     const onChange=(e)=>{
@@ -62,7 +64,7 @@ function Notes() {
                             </form>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button ref={refclose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
